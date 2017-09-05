@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Poker Calc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="jquery.min.js"></script>
+  <script src="angular.min.js"></script>
+  <script src="materialize.min.js"></script>
+  <script src="controller.js"></script>
+</head>
+<style type="text/css">
+ body {
+    /*margin: 0;
+    height: 100%;*/
+    font-family: 'Raleway', sans-serif;
+}
+</style>
+<body style="background-color: #f1f1f1;" ng-app="pokerApp" ng-controller="app">
+  <div style="background-color: white;" class="container">
+    <h2 style="text-align: center;background-color: teal;color: white; padding: 20px;">Poker Calculator</h2>
+    <form ng-if="playDisabled">
+      <div class="container">
+        <div class="row">
+          <div class="input-field col s12">
+            <input ng-model="players[0].score" name="score" id="initialScore" type="number" class="validate" required>
+            <label for="initialScore">Initial Score</label>
+          </div>
+        </div>
+        <div class="row">
+          <p class="col s10" style="color: teal;font-size: 2rem;">Enter the names of the players : </p>
+          <i ng-click="addPlayer()" style="float: right;color:teal; padding-top: 37px;cursor: pointer;" class="material-icons small col s2">add_circle</i>
+        </div>
+        <div style="padding: 15px;" ng-repeat="player in players">
+          <div class="row">
+            <div class="input-field col s11">
+              <input ng-model="player.name" id="nameOfPlayer{{$index}}" type="text" class="validate" required>
+              <label for="nameOfPlayer{{$index}}">Name {{$index + 1}} :</label>
+            </div>
+            <div class="col s1">
+              <i ng-click="removePlayer()" ng-show="$last" style="color:teal; padding-top: 25px;cursor: pointer;" class="material-icons small">clear</i>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12">
+            <a  ng-click="play()" style="float : right;" class="waves-effect waves-light btn">Lets Play</a>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div ng-if="!playDisabled" class="container" >
+      <table class="responsice-table centered highlight">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="player in players">
+            <td>{{player.name}}</td>
+            <td>{{player.score}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <hr color= "teal" width="80%" noshade>
+      <div class="input-field col s12">
+    <input ng-model="potScore.bid" id="potScoreId" type="number" class="validate" >
+    <label for="potScore">Starting Bid</label>
+  </div>
+  <div class="collection">
+    <p class="collection-item"><span class="badge">{{potScore.bid}}</span>Bidding</p>
+  </div>
+  <div class="collection">
+    <p class="collection-item"><span class="badge">{{potScore.score}}</span>Pot Score</p>
+  <div ng-if="player.name" ng-repeat="player in players track by $index">
+  <div ng-show="playerFold" class="collection">
+    <p class="collection-item"><span class="badge">{{player.action}}</span>{{player.name}}</p>
+  </div>
+  &nbsp;&nbsp;&nbsp;
+  <button id="raiseby" ng-show="playerFold" ng-disabled="player.raiseDisabled" ng-click="raiseBy($index,player)" class="waves-effect waves-light btn">Raise By</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <button id="call" ng-show="playerFold" ng-disabled="player.callDisabled" ng-click="call($index,potScore.bid)" class="waves-effect waves-light btn">Call</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <button id="fold" ng-show="playerFold" ng-disabled="player.foldDisabled" ng-click="playerFold = !playerFold" class="waves-effect waves-light btn">Fold</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <br><br>
+  <div ng-show="player.raiseByDisabled" style="display: inline-block;" class="input-field col s8">
+    <input ng-model="raiseBid" id="raiseBy" type="number" class="validate">
+    <label for="raiseBy">Raise By</label>
+  </div>
+  <div ng-show="player.raiseByDisabled" style="display: inline-block; float:right;" class="col s4">
+    <button ng-click="raise($index,raiseBid,potScore.bid)" class="waves-effect waves-light btn">Raise</button>
+  </div>
+</div>
+</div>
+<br>
+<div style="float:left; display: inline-block;" class="col s6">
+    <button ng-click="end()" class="waves-effect waves-light btn">End</button>
+  </div>
+<div style="float:right; display: inline-block;" class="col s6">
+    <button ng-click="next()" class="waves-effect waves-light btn">Next</button>
+  </div>
+</body>
+</html>
+
